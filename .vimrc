@@ -11,6 +11,8 @@ set nocompatible
 " Syntax highlighting {{{
 set t_Co=256
 set background=dark
+let g:molotov_visibility = "high"
+let g:molotov_contrast = "high"
 syntax on
 colorscheme molotov
 " }}}
