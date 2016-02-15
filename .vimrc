@@ -70,7 +70,7 @@ set nostartofline " Don't reset cursor to start of line when moving around
 set nowrap " Do not wrap lines
 set nu " Enable line numbers
 set ofu=syntaxcomplete#Complete " Set omni-completion method
-set regexpengine=1 " Use the old regular expression engine (it's faster for certain language syntaxes)
+" set regexpengine=1 " Use the old regular expression engine (it's faster for certain language syntaxes)
 set report=0 " Show all changes
 set ruler " Show the cursor position
 set scrolloff=3 " Start scrolling three lines before horizontal border of window
@@ -124,6 +124,19 @@ endif
 augroup general_config
   autocmd!
 
+  " Swap : and ; {{{
+  nnoremap ; :
+  nnoremap : ;
+  " }}}
+
+  " Swap v and CTRL-V, because Block mode is more useful that Visual mode {{{
+  nnoremap    v   <C-V>
+  nnoremap <C-V>     v
+  
+  vnoremap    v   <C-V>
+  vnoremap <C-V>     v
+  " }}}
+
   " Speed up viewport scrolling {{{
   nnoremap <C-e> 3<C-e>
   nnoremap <C-y> 3<C-y>
@@ -137,10 +150,10 @@ augroup general_config
   " }}}
 
   " Better split switching (Ctrl-j, Ctrl-k, Ctrl-h, Ctrl-l) {{{
-  map <C-j> <C-W>j
-  map <C-k> <C-W>k
-  map <C-H> <C-W>h
-  map <C-L> <C-W>l
+  " map <C-j> <C-W>j
+  " map <C-k> <C-W>k
+  " map <C-H> <C-W>h
+  " map <C-L> <C-W>l
   " }}}
 
   " Sudo write (,W) {{{
@@ -176,16 +189,6 @@ augroup general_config
   " Clear last search (,qs) {{{
   map <silent> <leader>qs <Esc>:noh<CR>
   " map <silent> <leader>qs <Esc>:let @/ = ""<CR>
-  " }}}
-
-  " Vim on the iPad {{{
-  if &term == "xterm-ipad"
-    nnoremap <Tab> <Esc>
-    vnoremap <Tab> <Esc>gV
-    onoremap <Tab> <Esc>
-    inoremap <Tab> <Esc>`^
-    inoremap <Leader><Tab> <Tab>
-  endif
   " }}}
 
   " Remap keys for auto-completion menu {{{
@@ -242,6 +245,16 @@ augroup general_config
   set relativenumber " Use relative line numbers. Current line is still in status bar.
   au BufReadPost,BufNewFile * set relativenumber
   " }}}
+  
+  " Keep undo history across sessions, by storing in file. {{{
+  " Only works all the time.
+  if has('persistent_undo') && !isdirectory(expand('~').'/.vim/backups')
+  silent !mkdir ~/.vim/backups > /dev/null 2>&1
+  set undodir=~/.vim/backups
+  set undofile
+  endif
+  " }}}
+  
 augroup END
 " }}}
 
@@ -413,7 +426,7 @@ augroup END
 " }}}
 
 
-" Filetypes -------------------------------------------------------------
+" Filetypes -------------------------------------------------------------{{{
 
 " C {{{
 augroup filetype_c
@@ -425,43 +438,6 @@ augroup filetype_c
   autocmd BufRead,BufNewFile *.[ch]   exe 'so ' . fname
   autocmd BufRead,BufNewFile *.[ch] endif
   " }}}
-augroup END
-" }}}
-
-" Clojure {{{
-augroup filetype_clojure
-  autocmd!
-  let g:vimclojure#ParenRainbow = 1 " Enable rainbow parens
-  let g:vimclojure#DynamicHighlighting = 1 " Dynamic highlighting
-  let g:vimclojure#FuzzyIndent = 1 " Names beginning in 'def' or 'with' to be indented as if they were included in the 'lispwords' option
-augroup END
-" }}}
-
-" Coffee {{{
-augroup filetype_coffee
-  autocmd!
-  au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
-augroup END
-" }}}
-
-" Fish {{{
-augroup filetype_fish
-  autocmd!
-  au BufRead,BufNewFile *.fish set ft=fish
-augroup END
-" }}}
-
-" Handlebars {{{
-augroup filetype_hbs
-  autocmd!
-  au BufRead,BufNewFile *.hbs,*.handlebars,*.hbs.erb,*.handlebars.erb setl ft=mustache syntax=mustache
-augroup END
-" }}}
-
-" Jade {{{
-augroup filetype_jade
-  autocmd!
-  au BufRead,BufNewFile *.jade set ft=jade syntax=jade
 augroup END
 " }}}
 
@@ -486,13 +462,6 @@ augroup filetype_markdown
 augroup END
 " }}}
 
-" Nu {{{
-augroup filetype_nu
-  autocmd!
-  au BufNewFile,BufRead *.nu,*.nujson,Nukefile setf nu
-augroup END
-" }}}
-
 " Ruby {{{
 augroup filetype_ruby
   autocmd!
@@ -507,21 +476,12 @@ augroup filetype_ruby
 augroup END
 " }}}
 
-" }}}
 " XML {{{
 augroup filetype_xml
   autocmd!
   au FileType xml exe ":silent 1,$!xmllint --format --recover - 2>/dev/null"
 augroup END
 " }}}
-
-" ZSH {{{
-augroup filetype_zsh
-  autocmd!
-  au BufRead,BufNewFile .zsh_rc,.functions,.commonrc set ft=zsh
-augroup END
-" }}}
-
 
 " Plugin Configuration -------------------------------------------------------------
 
