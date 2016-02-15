@@ -103,6 +103,7 @@ set wildmenu " Hitting TAB in command mode will show possible completions above 
 set wildmode=list:longest " Complete only until point of ambiguity
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
+
 " }}}
 
 " }}}
@@ -256,6 +257,7 @@ augroup general_config
   set undofile
   endif
   " }}}
+
   
 augroup END
 " }}}
@@ -478,6 +480,15 @@ augroup filetype_ruby
 augroup END
 " }}}
 
+" Python {{{
+
+augroup filetype_python
+  autocmd!
+  au BufRead,BufNewFile *.py,*.pyc set ft=python syntax=python
+augroup END
+
+" }}}
+
 " XML {{{
 augroup filetype_xml
   autocmd!
@@ -485,7 +496,10 @@ augroup filetype_xml
 augroup END
 " }}}
 
-" Plugin Configuration -------------------------------------------------------------
+
+"}}}
+
+" Plugin Configuration {{{
 
 " Airline.vim {{{
 augroup airline_config
@@ -565,13 +579,24 @@ augroup syntastic_config
   let g:syntastic_error_symbol = '✗'
   let g:syntastic_warning_symbol = '⚠'
   let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+  let g:syntastic_python_checkers = ['flake8']
+
+  set statusline+=%#warningmsg#
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
+
+  let g:syntastic_always_populate_loc_list = 1
+  let g:syntastic_auto_loc_list = 1
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_check_on_wq = 0
 augroup END
 " }}}
 
+" }}}
 
-" Plugins -------------------------------------------------------------
+" Plugins -------------------------------------------------------------{{{
 
-" Load plugins {{{
+" Load plugins 
 call plug#begin('~/.vim/plugged')
 
 Plug 'ap/vim-css-color'
@@ -608,6 +633,6 @@ Plug 'wavded/vim-stylus',      { 'for': 'stylus' }
 Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
-
+Plug 'Valloric/YouCompleteMe'
 call plug#end()
 " }}}
