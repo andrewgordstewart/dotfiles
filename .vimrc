@@ -590,7 +590,27 @@ augroup syntastic_config
   let g:syntastic_check_on_open = 1
   let g:syntastic_check_on_wq = 0
 augroup END
+ " }}}
+
+" Ultisnips.vim {{{
+let g:UltiSnipsExpandTrigger="<c-k>"
+let g:UltiSnipsJumpForwardTrigger="<c-k>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " }}}
+
+" Jedi-vim.vim {{{
+
+let g:jedi#use_splits_not_buffers = "left"
+let g:jedi#goto_command = "<leader>d"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = "<leader>n"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
+let g:jedi#completions_enabled = 0
+
+"}}}
 
 " }}}
 
@@ -634,5 +654,9 @@ Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
 Plug 'Valloric/YouCompleteMe'
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'davidhalter/jedi-vim'
 call plug#end()
 " }}}
