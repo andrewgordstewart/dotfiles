@@ -1,0 +1,2 @@
+max-line-length = 160
+expand_indent = '  '
