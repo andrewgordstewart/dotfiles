@@ -1,8 +1,8 @@
 [alias]
-	c = commit -am
+	c = commit
 	up = pull
 	p = push
-	s = status -s
+	s = status
 	sclone = clone --depth=1
 	co = checkout
 	df = diff --color --color-words --abbrev
@@ -12,6 +12,7 @@
 	d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
 
 	reup = rebase-update # depot_tools specific
+	a = add
 	
 [core]
 	excludesfile = ~/.gitignore
@@ -46,6 +47,7 @@
 # git mergetool
 [merge]
 	tool = opendiff
+	conflictstyle = diff3
 
 # rewrites of repo paths
 [url "git@github.com:"]
@@ -64,13 +66,18 @@
 [help]
 	autocorrect = 1
 
-# push easily. http://stackoverflow.com/a/23918418/89484
-[push]
-	default = current
-
 # use separate file for username / github token / etc 
 [include]
   path = ~/.gitconfig.local
 
 [init]
 	templatedir = ~/.git_template
+[user]
+	name = Andrew Stewart
+	email = andrew.gord.stewart@gmail.com
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
+[push]
+	default = simple
