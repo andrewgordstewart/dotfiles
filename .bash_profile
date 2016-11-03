@@ -52,8 +52,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 # ^ the only downside with this is [up] on the readline will go over all history not just this bash session.
 
-
-
 ##
 ## hooking in other apps…
 ##
@@ -67,8 +65,6 @@ export NVM_DIR="$HOME/.nvm"
 # z beats cd most of the time.
 #   github.com/rupa/z
 source ~/code/z/z.sh
-
-
 
 ##
 ## Completion…
@@ -102,7 +98,6 @@ fi;
 # You could just use `-g` instead, but I like being explicit
 complete -W "NSGlobalDomain" defaults
 
-
 ##
 ## better `cd`'ing
 ##
@@ -113,6 +108,10 @@ shopt -s nocaseglob;
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell;
 
+# added by Miniconda2 4.1.11 installer
+export PATH="/Users/andrewstewart/miniconda2/bin:$PATH"
 
-
+# Use the postgres mac app's CLI tools
+export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
+export PGDATA=/usr/local/var/postgres
 

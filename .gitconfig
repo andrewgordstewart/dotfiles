@@ -19,6 +19,7 @@
 	attributesfile = ~/.gitattributes
 	# insanely beautiful diffs
 	pager = diff-highlight | diff-so-fancy | less -r
+        editor = nvim
 	
 # so much color
 [color]
@@ -81,3 +82,5 @@
 	required = true
 [push]
 	default = simple
+[credential]
+	helper = osxkeychain

@@ -151,3 +151,10 @@ webmify(){
 shellswitch () {
 	chsh -s $(brew --prefix)/bin/$1
 }
+
+# Tell me when a task is done
+
+remind_me_in() {
+sleep $1
+osascript -e "tell app \"System Events\" to display dialog \"$2!\""
+}

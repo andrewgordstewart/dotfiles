@@ -6,9 +6,23 @@
 
 " Make vim more useful {{{
 set nocompatible
+syntax on
+filetype on
+filetype indent on
+filetype plugin on
 " }}}
 
 " Syntax highlighting {{{
+set t_Co=256
+set background=dark
+let g:molotov_visibility = "high"
+let g:molotov_contrast = "high"
+syntax on
+colorscheme molotov
+" }}}
+
+
+" Autocompletion {{{
 set t_Co=256
 set background=dark
 let g:molotov_visibility = "high"
@@ -33,14 +47,14 @@ set backspace=indent,eol,start
 set cursorline " Highlight current line
 set diffopt=filler " Add vertical spaces to keep right and left aligned
 set diffopt+=iwhite " Ignore whitespace changes (focus on code changes)
-set encoding=utf-8 nobomb " BOM often causes trouble
+" set encoding=utf-8 nobomb " BOM often causes trouble
 set esckeys " Allow cursor keys in insert mode
 set expandtab " Expand tabs to spaces
 set foldcolumn=0 " Column to show folds
 set foldenable " Enable folding
-set foldlevel=0 " Close all folds by default
+set foldlevel=2 " Fold to method defiitions by default
 set foldmethod=syntax " Syntax are used to specify folds
-set foldminlines=0 " Allow folding single lines
+set foldminlines=1 " Allow folding single lines
 set foldnestmax=5 " Set max fold nesting level
 set formatoptions=
 set formatoptions+=c " Format comments
@@ -90,7 +104,7 @@ set suffixes=.bak,~,.swp,.swo,.o,.d,.info,.aux,.log,.dvi,.pdf,.bin,.bbl,.blg,.br
 set switchbuf=""
 set title " Show the filename in the window titlebar
 set ttyfast " Send more characters at a given time
-set ttymouse=xterm " Set mouse type to xterm
+" set ttymouse=xterm " Set mouse type to xterm
 set undofile " Persistent Undo
 set viminfo=%,'9999,s512,n~/.vim/viminfo " Restore buffer list, marks are remembered for 9999 files, registers up to 512Kb are remembered
 set visualbell " Use visual bell instead of audible bell (annnnnoying)
@@ -103,6 +117,7 @@ set wildmenu " Hitting TAB in command mode will show possible completions above 
 set wildmode=list:longest " Complete only until point of ambiguity
 set winminheight=0 " Allow splits to be reduced to a single line
 set wrapscan " Searches wrap around end of file
+set clipboard=unnamed " Copy to system clipboard on osx
 
 " }}}
 
@@ -126,6 +141,13 @@ endif
 " General {{{
 augroup general_config
   autocmd!
+  "
+  " Change line highlighting{{{
+  hi CursorLine   cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+  hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
+  nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
+  " }}}
+  "
 
   " Swap : and ; {{{
   nnoremap ; :
@@ -234,7 +256,8 @@ augroup general_config
   " }}}
 
   " Toggle folds (<Space>) {{{
-  nnoremap <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? 'zMzx' : 'zc')<CR>
+  " nnoremap <silent> <space> :exe 'silent! normal! '.((foldclosed('.')>0)? 'zMzx' : 'zc')<CR>
+  nnoremap <silent> <space> za
   " }}}
 
   " Fix page up and down {{{
@@ -248,6 +271,12 @@ augroup general_config
   set relativenumber " Use relative line numbers. Current line is still in status bar.
   au BufReadPost,BufNewFile * set relativenumber
   " }}}
+
+  " Use arrow keys for switching buffers {{{
+  nnoremap <silent> <Right> :bnext<CR>
+  nnoremap <silent> <Left> :bprevious<CR>
+  " }}}
+
   
   " Keep undo history across sessions, by storing in file. {{{
   " Only works all the time.
@@ -258,6 +287,11 @@ augroup general_config
   endif
   " }}}
 
+  " Build current latex file
+  command! Latex execute "!pdflatex '%'"
+  nnoremap <leader>l :Latex <CR><CR>
+  nnoremap <leader>ll :Latex <CR><CR> :Latex <CR><CR>
+  nnoremap <leader>L :Latex <CR>
   
 augroup END
 " }}}
@@ -429,7 +463,6 @@ augroup restore_cursor
 augroup END
 " }}}
 
-
 " Filetypes -------------------------------------------------------------{{{
 
 " C {{{
@@ -525,6 +558,20 @@ augroup ctrlp_config
   let g:ctrlp_switch_buffer = 'Et' " Jump to tab AND buffer if already open
   let g:ctrlp_open_new_file = 'r' " Open newly created files in the current window
   let g:ctrlp_open_multiple_files = 'ij' " Open multiple files in hidden buffers, and jump to the first one
+
+  let g:ctrlp_map = '<c-p>'
+  let g:ctrlp_cmd = 'CtrlPLastMode'
+  let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
+augroup END
+" }}}
+
+" Unite.vim {{{
+augroup unite_config
+  autocmd!
+  " call unite#filters#matcher_default#use(['matcher_fuzzy'])
+  " call unite#filters#sorter_default#use(['sorter_rank'])
+  " call unite#custom#source('file,file/new,buffer,file_rec,line', 'matchers', 'matcher_fuzzy')
+  nnoremap <C-k> :<C-u>Unite -buffer-name=search -start-insert line<cr>
 augroup END
 " }}}
 
@@ -573,29 +620,39 @@ augroup rainbow_parenthesis_config
 augroup END
 " }}}
 
-" Syntastic.vim {{{
-augroup syntastic_config
-  autocmd!
-  let g:syntastic_error_symbol = '✗'
-  let g:syntastic_warning_symbol = '⚠'
-  let g:syntastic_ruby_checkers = ['mri', 'rubocop']
-  let g:syntastic_python_checkers = ['flake8']
+" rubocop.vim {{{
+augroup rubocop_config
+  let g:vimrubocop_config = '/Users/andrewstewart/Code/zesty/backend/.rubocop.yml'
 
-  set statusline+=%#warningmsg#
-  set statusline+=%{SyntasticStatuslineFlag()}
-  set statusline+=%*
-
-  let g:syntastic_always_populate_loc_list = 1
-  let g:syntastic_auto_loc_list = 1
-  let g:syntastic_check_on_open = 1
-  let g:syntastic_check_on_wq = 0
 augroup END
  " }}}
 
+
+" Syntastic.vim {{{
+" augroup syntastic_config
+  " autocmd!
+  " let g:syntastic_error_symbol = '✗'
+  " let g:syntastic_warning_symbol = '⚠'
+  " let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+  " let g:syntastic_python_checkers = ['flake8']
+
+  " set statusline+=%#warningmsg#
+  " set statusline+=%{SyntasticStatuslineFlag()}
+  " set statusline+=%*
+
+  " let g:syntastic_always_populate_loc_list = 1
+  " let g:syntastic_auto_loc_list = 1
+  " let g:syntastic_check_on_open = 1
+  " let g:syntastic_check_on_wq = 0
+" augroup END
+ " }}}
+
 " Ultisnips.vim {{{
-let g:UltiSnipsExpandTrigger="<c-k>"
-let g:UltiSnipsJumpForwardTrigger="<c-k>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" let g:UltiSnipsSnippetsDir        = '~/.vim/snippets/'
+" let g:UltiSnipsSnippetDirectories = ['UltiSnips']
+" let g:UltiSnipsExpandTrigger       = '<tab>'
+" let g:UltiSnipsJumpForwardTrigger  = '<C-d>'
+" let g:UltiSnipsJumpBackwardTrigger = '<C-a>'
 " }}}
 
 " Jedi-vim.vim {{{
@@ -630,14 +687,14 @@ Plug 'junegunn/goyo.vim'
 Plug 'kchmck/vim-coffee-script'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'kien/rainbow_parentheses.vim'
-Plug 'msanders/snipmate.vim'
+" Plug 'msanders/snipmate.vim'
 Plug 'mustache/vim-mustache-handlebars'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'oplatek/Conque-Shell'
 Plug 'pangloss/vim-javascript'
 Plug 'rking/ag.vim'
 Plug 'scrooloose/nerdcommenter'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 Plug 'slim-template/vim-slim', { 'for': 'slim' }
 Plug 'thoughtbot/vim-rspec'
 Plug 'tpope/vim-fugitive'
@@ -653,10 +710,17 @@ Plug 'wavded/vim-stylus',      { 'for': 'stylus' }
 Plug 'wlangstroth/vim-racket'
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
-Plug 'Valloric/YouCompleteMe'
+" Plug 'Valloric/YouCompleteMe'
 Plug 'ervandew/supertab'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'tpope/vim-fugitive'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 Plug 'davidhalter/jedi-vim'
+Plug 'python-rope/rope'
+Plug 'Shougo/unite.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'ngmy/vim-rubocop'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 call plug#end()
 " }}}

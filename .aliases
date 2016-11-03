@@ -13,14 +13,15 @@ alias ll='l'
 hash gls >/dev/null 2>&1 || alias gls="ls"
 
 # Easier navigation: .., ..., ~ and -
-cd() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
-alias ..="cd .."
-alias cd..="cd .."
-alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
-alias ~="cd ~" # `cd` is probably faster to type though
-alias -- -="cd -"
+function d() { builtin cd "$@" && clear && ll; }               # Always list directory contents upon 'cd'
+
+alias ..="d .."
+alias d..="cd .."
+alias ...="d ../.."
+alias ....="d ../../.."
+alias .....="d ../../../.."
+alias ~="d ~" # `d` is probably faster to type though
+alias -- -="d -"
 
 # mv, rm, cp
 alias mv='mv -v'
@@ -76,6 +77,9 @@ alias free_diskspace_report="diskspace_report"
 
 # Shortcuts
 alias g="git"
+alias clear_git="git branch -d $(git branch --merged); git remote prune origin"
+alias rubogit="git diff --name-only origin/master | grep 'rb' | xargs bundle exec rubocop --auto-correct"
+
 alias v="vim"
 alias ungz="gunzip -k"
 
@@ -94,3 +98,7 @@ alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo 
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 	alias "$method"="lwp-request -m '$method'"
 done
+
+# Useful scripts
+alias flamegraph="./~/Code/FlameGraph/flamegraph.pl"
+
