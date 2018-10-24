@@ -58,9 +58,6 @@ export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 
-# Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
 
 # z beats cd most of the time.
 #   github.com/rupa/z
@@ -108,10 +105,44 @@ shopt -s nocaseglob;
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell;
 
-# added by Miniconda2 4.1.11 installer
-export PATH="/Users/andrewstewart/miniconda2/bin:$PATH"
+# added by the user!
+# export PATH="/Users/andrewstewart/anaconda3/bin:$PATH"
 
 # Use the postgres mac app's CLI tools
 export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 export PGDATA=/usr/local/var/postgres
 
+# Add the GOROOT-based install location to PATH
+export PATH=$PATH:/usr/local/opt/go/libexec/bin
+
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" 
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+. $(brew --prefix)/etc/bash_completion
+fi
+
+source $HOME/.profile
+
+# Get rust/cargo working
+source $HOME/.cargo/env
+
+# Get git autocomplete working
+source ~/dotfiles/bin/git-completion.bash
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+# I can't figure out how to configure this as a default
+rvm use 2.3.5
+
+export DARK_SKY_API_KEY=77a8bf267e9eb2c0d6082f5a60a1ff08
+# export INREACH_TEXT_MESSAGE_URL=https://inreach.garmin.com/TextMessage/TxtMsg
+export INREACH_TEXT_MESSAGE_URL=http://localhost:1337
+export INREACH_DATABASE_URI=postgresql://andrewstewart:inreach-dev@localhost/inreach-dev
+
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+RUST_SRC_PATH=/Users/andrewstewart/.cargo/bin/rustc

@@ -15,20 +15,16 @@ filetype plugin on
 " Syntax highlighting {{{
 set t_Co=256
 set background=dark
-let g:molotov_visibility = "high"
-let g:molotov_contrast = "high"
 syntax on
-colorscheme molotov
+colo monokai
 " }}}
 
 
 " Autocompletion {{{
 set t_Co=256
 set background=dark
-let g:molotov_visibility = "high"
-let g:molotov_contrast = "high"
 syntax on
-colorscheme molotov
+colorscheme 
 " }}}
 
 " Mapleader {{{
@@ -722,5 +718,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'ngmy/vim-rubocop'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'altercation/vim-colors-solarized'
 call plug#end()
-" }}}
+" }}}"

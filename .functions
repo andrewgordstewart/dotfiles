@@ -158,3 +158,12 @@ remind_me_in() {
 sleep $1
 osascript -e "tell app \"System Events\" to display dialog \"$2!\""
 }
+
+# Join strings
+function join_by { local IFS="$1"; shift; echo "$*"; }
+
+# git helpers
+function gfix() {
+	git commit -m "fixup:$(join_by ' ' $@)"
+}
+

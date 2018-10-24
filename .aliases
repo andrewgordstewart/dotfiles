@@ -91,7 +91,7 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; rm -rfv ~/.Trash; sudo rm /p
 
 # Update installed Ruby gems, Homebrew, npm, and their installed packages
 alias brew_update="brew -v update; brew -v upgrade --all; brew cleanup; brew cask cleanup; brew prune; brew doctor"
-alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update --no-rdoc --no-ri'
+# alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo gem update --system; sudo gem update --no-rdoc --no-ri'
 
 
 # One of @janmoesen’s ProTip™s
@@ -99,6 +99,27 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 	alias "$method"="lwp-request -m '$method'"
 done
 
-# Useful scripts
+# Other stuff
 alias flamegraph="./~/Code/FlameGraph/flamegraph.pl"
 
+alias pt=papertrail
+
+alias heroku-vim='echo "
+mkdir vim
+curl https://s3.amazonaws.com/heroku-vim/vim-7.3.tar.gz --location --silent | tar xz -C vim
+export PATH=\$PATH:/app/vim/bin
+bash
+"'
+
+alias rdbc="rake db:drop; rake db:create; rake db:structure:load; rake db:migrate"
+alias rdbt="rake db:test:prepare"
+alias sguard="spring stop; guard"
+
+alias gcane="git commit --amend --no-edit"
+alias gca="git commit --amend"
+alias gwip="git add -u; git commit -m wip"
+alias grom="git fetch && git rebase origin/master"
+
+alias c11="clang++ -std=c++11 -stdlib=libc++ -O2 -o solve"
+
+alias pien3="pipenv --python 3.6.4"
