@@ -146,3 +146,7 @@ export INREACH_DATABASE_URI=postgresql://andrewstewart:inreach-dev@localhost/inr
 export PATH="$HOME/.cargo/bin:$PATH"
 
 RUST_SRC_PATH=/Users/andrewstewart/.cargo/bin/rustc
+
+# Ensure brew installed binaries take precedence
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+
